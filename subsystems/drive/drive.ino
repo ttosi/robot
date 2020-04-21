@@ -69,8 +69,8 @@ void receive(int byteCount)
         //  0x01 = left motor
         //  0x02 = right motor
         //  0x03 = both motors
-        // data[1] left motor number of revolutions (-255 - 255)
-        // data[2] right motor number of revolutions (-255 - 255)
+        // data[1] left motor number of revolutions (-128 - 127)
+        // data[2] right motor number of revolutions (-128 - 127)
         // data[3] speed (0 - 255)
         // data[4] acceleration (0 - 255)
         while (Wire.available())
