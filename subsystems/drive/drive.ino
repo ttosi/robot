@@ -85,18 +85,19 @@ void receive(int byteCount)
                 motorLeft.setTargetPositionToStop();
                 motorRight.setTargetPositionToStop();
                 break;
-            // case 0x01:
-            //     motorLeft.setTargetPositionRelativeInRevolutions(data[1]);
-            //     motorLeft.setSpeedInRevolutionsPerSecond(data[2]);
-            //     break;
-            // case 0x02:
-            //     motorRight.setTargetPositionRelativeInRevolutions(data[1]);
-            //     motorRight.setSpeedInRevolutionsPerSecond(data[2]);
-            //     break;
+            case 0x01:
+                motorLeft.setSpeedInRevolutionsPerSecond(data[3]);
+                motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(data[4]);
+                motorLeft.setTargetPositionRelativeInRevolutions(data[1]);
+                break;
+            case 0x02:
+                motorRight.setSpeedInRevolutionsPerSecond(data[3]);
+                motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(data[4]);
+                motorRight.setTargetPositionRelativeInRevolutions(data[2]);
+                break;
             case 0x03:
                 motorLeft.setSpeedInRevolutionsPerSecond(data[3]);
                 motorRight.setSpeedInRevolutionsPerSecond(data[3]);
-
                 motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(data[4]);
                 motorRight.setAccelerationInRevolutionsPerSecondPerSecond(data[4]);
 
