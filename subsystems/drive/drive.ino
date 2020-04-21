@@ -24,13 +24,13 @@ void setup()
     Wire.onReceive(receive);
     Wire.onRequest(send);
 
-    // setup left sero motor
+    // setup left servo motor
     motorLeft.connectToPins(MOTOR_LEFT_STEP_PIN, MOTOR_LEFT_DIR_PIN);
     motorLeft.setStepsPerRevolution(200);
     motorLeft.setSpeedInRevolutionsPerSecond(1);
     motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(1);
 
-    // setup right sero motor
+    // setup right servo motor
     motorRight.connectToPins(MOTOR_RIGHT_STEP_PIN, MOTOR_RIGHT_DIR_PIN);
     motorRight.setStepsPerRevolution(200);
     motorRight.setSpeedInRevolutionsPerSecond(1);

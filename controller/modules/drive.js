@@ -6,10 +6,10 @@ const SLAVE_ADDRESS = config.slaves.drive;
 // buffer[1] = [left motor revolutions (negative is reverse)]
 // buffer[2] = [right motor revolutions (negative is reverse)]
 // buffer[3] = [speed]
+// buffer[34 = [acceleration]
 
 exports.forward = async (revs = 1, speed = 1, accel = 1) => {
   const forward = Buffer.from([protocol.motor.both, revs, -revs, speed, accel]);
-  sendCommand();
   return await bus.write(SLAVE_ADDRESS, forward);
 };
 
@@ -29,7 +29,7 @@ exports.spinRight = async (revs = 1, speed = 1, accel = 5) => {
 };
 
 exports.stop = () => {
-  return await bus.write(SLAVE_ADDRESS, Buffer.from([protocol.motor.stop]));
+  bus.write(SLAVE_ADDRESS, Buffer.from([protocol.motor.stop]));
 };
 
 const protocol = {
@@ -44,11 +44,3 @@ const protocol = {
     backward: 0x02,
   },
 };
-
-// exports.move = () => {
-//     const left = Buffer.from([protocol.motor.left, -0x03, 0x01]);
-//     const right = Buffer.from([protocol.motor.right, 0x03, 0x01]);
-
-//     bus.write(SLAVE_ADDRESS, left);
-//     bus.write(SLAVE_ADDRESS, right);
-//   };

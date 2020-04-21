@@ -13,6 +13,6 @@ const drive = require("./modules/drive.js");
   await drive.spinLeft();
   console.log("spin left done!!!");
 
-  await drive.stop();
+  drive.stop();
   console.log("stopped!!!");
 })();
