@@ -1,35 +1,82 @@
+// buffer[0] = [motor selection]
+// buffer[1] = [speed]
+// buffer[2] = [acceleration]
+// buffer[3] = [revolutions]
 const config = require("../config");
 const bus = require("./bus");
 const SLAVE_ADDRESS = config.slaves.drive;
 
-// buffer[0] = [motor selection]
-// buffer[1] = [left motor revolutions (negative is reverse)]
-// buffer[2] = [right motor revolutions (negative is reverse)]
-// buffer[3] = [speed]
-// buffer[34 = [acceleration]
+exports.queue = {
+  commands: [1,2,3],
+  add(cmd) {
+    console.log('add');
+    this.commands.push(cmd);
+  },
+  remove() {
+    console.log('remove');
+  },
+  execute() {
+    console.log('execute')
+    console.log(this.commands);
+  }
+}
 
-exports.forward = async (revs = 1, speed = 1, accel = 1) => {
-  const forward = Buffer.from([protocol.motor.both, revs, -revs, speed, accel]);
-  return await bus.write(SLAVE_ADDRESS, forward);
+exports.forward = async (speed = 1, accel = 1, revs = 1) => {
+  return Promise.all([
+    bus.write(
+      SLAVE_ADDRESS,
+      Buffer.from([protocol.motor.left, speed, accel, revs])
+    ),
+    bus.write(
+      SLAVE_ADDRESS,
+      Buffer.from([protocol.motor.right, speed, accel, -revs])
+    ),
+  ]);
 };
 
 exports.reverse = async (revs = 1, speed = 1, accel = 1) => {
-  const reverse = Buffer.from([protocol.motor.both, -revs, revs, speed, accel]);
-  return await bus.write(SLAVE_ADDRESS, reverse);
+  return Promise.all([
+    bus.write(
+      SLAVE_ADDRESS,
+      Buffer.from([protocol.motor.left, speed, accel, -revs])
+    ),
+    bus.write(
+      SLAVE_ADDRESS,
+      Buffer.from([protocol.motor.right, speed, accel, revs])
+    ),
+  ]);
 };
 
 exports.spinLeft = async (revs = 1, speed = 1, accel = 5) => {
-  const spinLeft = Buffer.from([protocol.motor.both, -revs, -revs, speed, accel]);
-  return await bus.write(SLAVE_ADDRESS, spinLeft);
+  return Promise.all([
+    bus.write(
+      SLAVE_ADDRESS,
+      Buffer.from([protocol.motor.left, speed, accel, revs])
+    ),
+    bus.write(
+      SLAVE_ADDRESS,
+      Buffer.from([protocol.motor.right, speed, accel, revs])
+    ),
+  ]);
 };
 
 exports.spinRight = async (revs = 1, speed = 1, accel = 5) => {
-  const spinRight = Buffer.from([protocol.motor.both, revs, revs, speed, accel]);
-  return await bus.write(SLAVE_ADDRESS, spinRight);
+  return Promise.all([
+    bus.write(
+      SLAVE_ADDRESS,
+      Buffer.from([protocol.motor.left, speed, accel, -revs])
+    ),
+    bus.write(
+      SLAVE_ADDRESS,
+      Buffer.from([protocol.motor.right, speed, accel, -revs])
+    ),
+  ]);
 };
 
 exports.stop = () => {
-  bus.write(SLAVE_ADDRESS, Buffer.from([protocol.motor.stop]));
+  return Promise.resolve(() => {
+    bus.write(SLAVE_ADDRESS, Buffer.from([protocol.motor.stop]));
+  });
 };
 
 const protocol = {

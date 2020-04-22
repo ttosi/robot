@@ -27,14 +27,14 @@ void setup()
     // setup left servo motor
     motorLeft.connectToPins(MOTOR_LEFT_STEP_PIN, MOTOR_LEFT_DIR_PIN);
     motorLeft.setStepsPerRevolution(200);
-    motorLeft.setSpeedInRevolutionsPerSecond(1);
-    motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(1);
+    // motorLeft.setSpeedInRevolutionsPerSecond(1);
+    // motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(1);
 
     // setup right servo motor
     motorRight.connectToPins(MOTOR_RIGHT_STEP_PIN, MOTOR_RIGHT_DIR_PIN);
     motorRight.setStepsPerRevolution(200);
-    motorRight.setSpeedInRevolutionsPerSecond(1);
-    motorRight.setAccelerationInRevolutionsPerSecondPerSecond(1);
+    // motorRight.setSpeedInRevolutionsPerSecond(1);
+    // motorRight.setAccelerationInRevolutionsPerSecondPerSecond(1);
 
     enableMotors(false);
 
@@ -64,56 +64,35 @@ void receive(int byteCount)
         int8_t data[byteCount];
         uint8_t index = 0;
 
-        // data[0] motor selection
-        //  0x00 = both motors stop (emergency stop!)
-        //  0x01 = left motor
-        //  0x02 = right motor
-        //  0x03 = both motors
-        // data[1] left motor number of revolutions (-128 - 127)
-        // data[2] right motor number of revolutions (-128 - 127)
-        // data[3] speed (0 - 255)
-        // data[4] acceleration (0 - 255)
         while (Wire.available())
             data[index++] = Wire.read();
 
-        if (data[0] > 0)
-            enableMotors(true);
-        
+        enableMotors(true);
+
         switch (data[0])
         {
-            case 0x00:
-                motorLeft.setTargetPositionToStop();
-                motorRight.setTargetPositionToStop();
+            case 0x00: // emergency stop
+                stop();
                 break;
-            case 0x01:
-                motorLeft.setSpeedInRevolutionsPerSecond(data[3]);
-                motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(data[4]);
-                motorLeft.setTargetPositionRelativeInRevolutions(data[1]);
+            case 0x01: // motor left
+                motorLeft.setSpeedInRevolutionsPerSecond(data[1]);
+                motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(data[2]);
+                motorLeft.setTargetPositionRelativeInRevolutions(data[3]);
                 break;
-            case 0x02:
-                motorRight.setSpeedInRevolutionsPerSecond(data[3]);
-                motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(data[4]);
-                motorRight.setTargetPositionRelativeInRevolutions(data[2]);
+            case 0x02: // motor right
+                motorRight.setSpeedInRevolutionsPerSecond(data[1]);
+                motorRight.setAccelerationInRevolutionsPerSecondPerSecond(data[2]);
+                motorRight.setTargetPositionRelativeInRevolutions(data[3]);
                 break;
-            case 0x03:
-                motorLeft.setSpeedInRevolutionsPerSecond(data[3]);
-                motorRight.setSpeedInRevolutionsPerSecond(data[3]);
-                motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(data[4]);
-                motorRight.setAccelerationInRevolutionsPerSecondPerSecond(data[4]);
-
-                motorLeft.setTargetPositionRelativeInRevolutions(data[1]);
-                motorRight.setTargetPositionRelativeInRevolutions(data[2]);
-                break;
-            default:
-                motorLeft.setTargetPositionToStop();
-                motorRight.setTargetPositionToStop();
+            default: // bad command, will stop
+                stop();
         }
     }
 }
 
 void send()
 {
-    if(motorLeft.motionComplete() && motorRight.motionComplete())
+    if (motorLeft.motionComplete() && motorRight.motionComplete())
     {
         Wire.write(0xff);
     }
@@ -123,17 +102,11 @@ void send()
     }
 }
 
-void setMotors()
-{
-}
-
-void move(int revolutions)
-{
-}
-
 void stop()
 {
     enableMotors(false);
+    motorLeft.setTargetPositionToStop();
+    motorRight.setTargetPositionToStop();
 }
 
 void enableMotors(bool enabled)
