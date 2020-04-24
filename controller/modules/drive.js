@@ -7,7 +7,7 @@ const bus = require("./bus");
 const SLAVE_ADDRESS = config.slaves.drive;
 
 exports.queue = {
-  commands: [1,2,3],
+  commands: [],
   add(cmd) {
     console.log('add');
     this.commands.push(cmd);
@@ -34,7 +34,7 @@ exports.forward = async (speed = 1, accel = 1, revs = 1) => {
   ]);
 };
 
-exports.reverse = async (revs = 1, speed = 1, accel = 1) => {
+exports.reverse = async (speed = 1, accel = 1, revs = 1) => {
   return Promise.all([
     bus.write(
       SLAVE_ADDRESS,
@@ -47,7 +47,7 @@ exports.reverse = async (revs = 1, speed = 1, accel = 1) => {
   ]);
 };
 
-exports.spinLeft = async (revs = 1, speed = 1, accel = 5) => {
+exports.spinLeft = async (speed = 1, accel = 1, revs = 1) => {
   return Promise.all([
     bus.write(
       SLAVE_ADDRESS,
@@ -60,7 +60,7 @@ exports.spinLeft = async (revs = 1, speed = 1, accel = 5) => {
   ]);
 };
 
-exports.spinRight = async (revs = 1, speed = 1, accel = 5) => {
+exports.spinRight = async (speed = 1, accel = 1, revs = 1) => {
   return Promise.all([
     bus.write(
       SLAVE_ADDRESS,

@@ -1,22 +1,19 @@
 const drive = require("./modules/drive.js");
 
 (async () => {
-  drive.queue.add();
-  drive.queue.add();
-  //drive.queue.execute();
-  
-  // await drive.forward(2, 1);
-  // console.log("forward complete!!!");
+  await drive.forward(3, 5, 5);
+  console.log("forward done!!!");
 
-  // await drive.reverse(2, 1);
-  // console.log("reverse complete!!!");
+  await drive.spinRight(1, 1, 1);
+  console.log("spin right done!!!");
 
-  // await drive.spinRight();
-  // console.log("spin right done!!!");
+  await drive.reverse(3, 5, 1);
+  console.log("forward done!!!");
 
-  // await drive.spinLeft();
-  // console.log("spin left done!!!");
+  await drive.spinLeft(1, 1, 2);
+  console.log("spin right done!!!");
 
-  // await drive.stop();
-  // console.log("stopped!!!");
+  await drive.forward(3, 5, 5);
+  console.log("forward done!!!");
+
 })();
