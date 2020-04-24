@@ -15,6 +15,11 @@ FlexyStepper motorRight;
 #define MOTOR_RIGHT_STEP_PIN 5
 #define MOTOR_RIGHT_DIR_PIN 4
 
+union floatToBytes {
+    char buffer[4];
+    float value;
+} converter;
+
 void setup()
 {
     Serial.begin(115200);
@@ -27,14 +32,10 @@ void setup()
     // setup left servo motor
     motorLeft.connectToPins(MOTOR_LEFT_STEP_PIN, MOTOR_LEFT_DIR_PIN);
     motorLeft.setStepsPerRevolution(200);
-    // motorLeft.setSpeedInRevolutionsPerSecond(1);
-    // motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(1);
 
     // setup right servo motor
     motorRight.connectToPins(MOTOR_RIGHT_STEP_PIN, MOTOR_RIGHT_DIR_PIN);
     motorRight.setStepsPerRevolution(200);
-    // motorRight.setSpeedInRevolutionsPerSecond(1);
-    // motorRight.setAccelerationInRevolutionsPerSecondPerSecond(1);
 
     enableMotors(false);
 
@@ -59,33 +60,72 @@ void loop()
 
 void receive(int byteCount)
 {
+    Serial.println("data received");
+
     if (Wire.available())
     {
         int8_t data[byteCount];
         uint8_t index = 0;
 
+        // read all the data from the master,
+        // we're expecting 13 bytes
         while (Wire.available())
             data[index++] = Wire.read();
+
+        uint8_t dataIdx;
+        uint8_t bufferIdx = 0;
+        uint8_t valuesIdx = 0;
+        float values[3] = {};
+
+        // loop through the last 12 bytes from the master
+        // (the first byte is the motor selection)
+        for (dataIdx = 1; dataIdx < 13; dataIdx++)
+        {
+            // fill the converter with bytes 1 - 4, 5 - 8 and 8 - 12
+            converter.buffer[bufferIdx] = data[dataIdx];
+
+            // when the converter buffer has four bytes,
+            // convert it to a float and store it in the values array
+            // then restart it all over for the next four bytes
+            if (bufferIdx == 3)
+            {
+                values[valuesIdx] = converter.value;
+                valuesIdx++;
+                bufferIdx = 0;
+            }
+            else
+            {
+                bufferIdx++;
+            }
+        }
+
+        // Serial.println("------------------");
+        // Serial.print("speed: ");
+        // Serial.println(values[0]);
+        // Serial.print("accel: ");
+        // Serial.println(values[1]);
+        // Serial.print("revs: ");
+        // Serial.println(values[2]);
 
         enableMotors(true);
 
         switch (data[0])
         {
-            case 0x00: // emergency stop
-                stop();
-                break;
-            case 0x01: // motor left
-                motorLeft.setSpeedInRevolutionsPerSecond(data[1]);
-                motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(data[2]);
-                motorLeft.setTargetPositionRelativeInRevolutions(data[3]);
-                break;
-            case 0x02: // motor right
-                motorRight.setSpeedInRevolutionsPerSecond(data[1]);
-                motorRight.setAccelerationInRevolutionsPerSecondPerSecond(data[2]);
-                motorRight.setTargetPositionRelativeInRevolutions(data[3]);
-                break;
-            default: // bad command, will stop
-                stop();
+        case 0x00: // emergency stop
+            stop();
+            break;
+        case 0x01: // motor left
+            motorLeft.setSpeedInRevolutionsPerSecond(values[0]);
+            motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(values[1]);
+            motorLeft.setTargetPositionRelativeInRevolutions(values[2]);
+            break;
+        case 0x02: // motor right
+            motorRight.setSpeedInRevolutionsPerSecond(values[0]);
+            motorRight.setAccelerationInRevolutionsPerSecondPerSecond(values[1]);
+            motorRight.setTargetPositionRelativeInRevolutions(values[2]);
+            break;
+        default: // bad command, e-stop
+            stop();
         }
     }
 }

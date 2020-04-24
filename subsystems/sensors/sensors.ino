@@ -3,6 +3,7 @@
 
 #include <Wire.h>
 #include <Adafruit_NeoPixel.h>
+#include "leds.h"
 
 #define SLAVE_ADDRESS 0x11
 #define STATUS_PIN 13
@@ -20,10 +21,8 @@ void setup()
     Wire.onReceive(receive);
     Wire.onRequest(send);
 
-    // pixels.begin();
-
-    strip.begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
-    strip.show();  // Turn OFF all pixels ASAP
+    strip.begin();
+    strip.show();
     strip.setBrightness(50);
 
     Serial.println("Sensor subsystem ready");
