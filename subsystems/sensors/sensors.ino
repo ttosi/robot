@@ -1,32 +1,32 @@
 // arduino-cli compile -v -b arduino:avr:nano:cpu=atmega328old ~/Projects/ws2812b-test/
 // arduino-cli upload -v -b arduino:avr:nano:cpu=atmega328old -p /dev/ttyUSB0 ws2812b-test/
 
-#include <Wire.h>
-#include <FastLED.h>
-#include "pixels.h"
+// #include <Wire.h>
+// #include <FastLED.h>
+// #include "pixels.h"
 
-// #define NUM_PIXELS 10
-// #define DATA_PIN 6
+// // #define NUM_PIXELS 10
+// // #define DATA_PIN 6
 
-// CRGB pixels[NUM_PIXELS];
+// // CRGB pixels[NUM_PIXELS];
 
-void setup()
-{
-    // FastLED.addLeds<NEOPIXEL, DATA_PIN>(pixels, NUM_PIXELS);
-    initStrip();
-}
+// void setup()
+// {
+//     // FastLED.addLeds<NEOPIXEL, DATA_PIN>(pixels, NUM_PIXELS);
+//     initStrip();
+// }
 
-void loop()
-{
-    // FadeInOut(0x00, 0x00, 0xff);
+// void loop()
+// {
+//     // FadeInOut(0x00, 0x00, 0xff);
 
-    // Strobe(0xff, 0x77, 0x00, 10, 100, 1000);
-    // Strobe(0xff, 0x00, 0x00, 10, 50, 100);
+//     // Strobe(0xff, 0x77, 0x00, 10, 100, 1000);
+//     // Strobe(0xff, 0x00, 0x00, 10, 50, 100);
 
-    // RunningLights(0x00, 0xff, 0x00, 50);
+//     // RunningLights(0x00, 0xff, 0x00, 50);
 
-    // colorWipe(0x00, 0xff, 0x00, 100);
-}
+//     // colorWipe(0x00, 0xff, 0x00, 100);
+// }
 
 // void FadeInOut(byte red, byte green, byte blue)
 // {
@@ -122,66 +122,65 @@ void loop()
 //     showStrip();
 // }
 
-// #include <Adafruit_NeoPixel.h>
+#include <Wire.h>
+#include <Adafruit_NeoPixel.h>
 
-// #define SLAVE_ADDRESS 0x11
-// #define STATUS_PIN 13
+#define SLAVE_ADDRESS 0x11
+#define STATUS_PIN 13
 
-// #define PIXELS_PIN 6
-// #define PIXELS_NUM 10
+#define PIXELS_PIN 6
+#define PIXELS_NUM 10
 
-// Adafruit_NeoPixel strip(PIXELS_NUM, PIXELS_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip(PIXELS_NUM, PIXELS_PIN, NEO_GRB + NEO_KHZ800);
 
-// void setup()
-// {
-//     Serial.begin(115200);
+void setup()
+{
+    Serial.begin(115200);
 
-//     Wire.begin(SLAVE_ADDRESS);
-//     Wire.onReceive(receive);
-//     Wire.onRequest(send);
+    Wire.begin(SLAVE_ADDRESS);
+    Wire.onReceive(receive);
+    Wire.onRequest(send);
 
-//     strip.begin();
-//     strip.show();
-//     strip.setBrightness(50);
+    // strip.begin();
+    // strip.show();
+    // strip.setBrightness(50);
 
-//     Serial.println("Sensor subsystem ready");
+    Serial.println("Sensor subsystem ready");
 
-//     strip.clear();
+    // strip.clear();
+}
 
-//     testprint("wazzzz up");
-// }
+void loop()
+{
+    // pixels.clear();
 
-// void loop()
-// {
-//     // pixels.clear();
+    // for (int i = 0; i < PIXELS_NUM; i++)
+    // {
+    //     pixels.setPixelColor(i, pixels.Color(0, 0, 75));
+    //     pixels.show();
 
-//     // for (int i = 0; i < PIXELS_NUM; i++)
-//     // {
-//     //     pixels.setPixelColor(i, pixels.Color(0, 0, 75));
-//     //     pixels.show();
+    //     delay(75);
+    // }
 
-//     //     delay(75);
-//     // }
+    // colorWipe(strip.Color(255, 0, 0), 50);
+    // colorWipe(strip.Color(0, 255, 0), 50);
+    // colorWipe(strip.Color(0, 0, 255), 50);
 
-//     // colorWipe(strip.Color(255, 0, 0), 50);
-//     // colorWipe(strip.Color(0, 255, 0), 50);
-//     // colorWipe(strip.Color(0, 0, 255), 50);
+    // theaterChase(strip.Color(127, 127, 127), 50);
+    // theaterChase(strip.Color(127, 0, 0), 50);
+    // theaterChase(strip.Color(0, 0, 127), 50);
 
-//     // theaterChase(strip.Color(127, 127, 127), 50);
-//     // theaterChase(strip.Color(127, 0, 0), 50);
-//     // theaterChase(strip.Color(0, 0, 127), 50);
+    // rainbow(10);
+    // theaterChaseRainbow(50);
+}
 
-//     // rainbow(10);
-//     // theaterChaseRainbow(50);
-// }
+void receive(int byteCount)
+{
+}
 
-// void receive(int byteCount)
-// {
-// }
-
-// void send()
-// {
-// }
+void send()
+{
+}
 
 // void colorWipe(uint32_t color, int wait)
 // {

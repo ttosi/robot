@@ -29,11 +29,11 @@ getCommandBuffer = (speed, accel, revs) => {
 
 exports.forward = async (speed = 1, accel = 1, revs = 1) => {
   return Promise.all([
-    bus.write(
+    bus.writeSync(
       SLAVE_ADDRESS,
       Buffer.from([protocol.motor.left, ...getCommandBuffer(speed, accel, revs)])
     ),
-    bus.write(
+    bus.writeSync(
       SLAVE_ADDRESS,
       Buffer.from([protocol.motor.right, ...getCommandBuffer(speed, accel, -revs)])
     )
@@ -42,11 +42,11 @@ exports.forward = async (speed = 1, accel = 1, revs = 1) => {
 
 exports.reverse = async (speed = 1, accel = 1, revs = 1) => {
   return Promise.all([
-    bus.write(
+    bus.writeSync(
       SLAVE_ADDRESS,
       Buffer.from([protocol.motor.left, ...getCommandBuffer(speed, accel, -revs)])
     ),
-    bus.write(
+    bus.writeSync(
       SLAVE_ADDRESS,
       Buffer.from([protocol.motor.right, ...getCommandBuffer(speed, accel, revs)])
     )
@@ -55,11 +55,11 @@ exports.reverse = async (speed = 1, accel = 1, revs = 1) => {
 
 exports.spinLeft = async (speed = 1, accel = 1, revs = 1) => {
   return Promise.all([
-    bus.write(
+    bus.writeSync(
       SLAVE_ADDRESS,
       Buffer.from([protocol.motor.left, ...getCommandBuffer(speed, accel, -revs)])
     ),
-    bus.write(
+    bus.writeSync(
       SLAVE_ADDRESS,
       Buffer.from([protocol.motor.right, ...getCommandBuffer(speed, accel, -revs)])
     )
@@ -68,11 +68,11 @@ exports.spinLeft = async (speed = 1, accel = 1, revs = 1) => {
 
 exports.spinRight = async (speed = 1, accel = 1, revs = 1) => {
   return Promise.all([
-    bus.write(
+    bus.writeSync(
       SLAVE_ADDRESS,
       Buffer.from([protocol.motor.left, ...getCommandBuffer(speed, accel, revs)])
     ),
-    bus.write(
+    bus.writeSync(
       SLAVE_ADDRESS,
       Buffer.from([protocol.motor.right, ...getCommandBuffer(speed, accel, revs)])
     ),
@@ -81,7 +81,7 @@ exports.spinRight = async (speed = 1, accel = 1, revs = 1) => {
 
 exports.stop = () => {
   return Promise.resolve(() => {
-    bus.write(SLAVE_ADDRESS, Buffer.from([protocol.motor.stop]));
+    bus.writeSync(SLAVE_ADDRESS, Buffer.from([protocol.motor.stop]));
   });
 };
 
