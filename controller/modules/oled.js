@@ -1,14 +1,14 @@
-const rpio = require("rpio");
-const Oled = require("sh1106-js");
+// const rpio = require("rpio");
+const Oled = require("./sh1106");
 const font = require("oled-font-5x7");
-const PngJs = require("pngjs").PNG;
-const fs = require("fs");
+// const PngJs = require("pngjs").PNG;
+// const fs = require("fs");
 
-rpio.init({
-  gpiomem: false,
-  mapping: "physical",
-});
-const oled = new Oled({ rpio });
+// rpio.init({
+//   gpiomem: false,
+//   mapping: "physical",
+// });
+const oled = new Oled();
 
 exports.init = async () => {
   return new Promise(async (resolve, reject) => {
@@ -28,7 +28,6 @@ exports.startMonitoring = async () => {
     await oled.writeString(10, 18, font, `x CPU LOAD: 1.8%`, "WHITE", false);
     await oled.writeString(10, 29, font, `MEM FREE: 82.1%`, "WHITE", false);
     await oled.writeString(10, 40, font, `DSK FREE: 64.7%`, "WHITE", false);
-    await oled.writeString(10, 51, font, `MEMORY: 87%`, "WHITE", false);
     await oled.update();
     resolve("monitoring started");
   });

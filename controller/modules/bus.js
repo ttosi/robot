@@ -26,3 +26,9 @@ exports.writeSync = (address, buffer) => {
     }, 100);
   });
 };
+
+exports.write = (address, buffer) => {
+  // return new Promise((resolve, reject) => {
+    i2c.write(address, buffer);
+  // });
+};
