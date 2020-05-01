@@ -86,7 +86,6 @@ class Oled {
     this._transferCmd([0xa1, 0xc8])
   }
 
-
   // write text to the oled
   async writeString(x, y, font, string, color, sync = true) {
     // start x offset

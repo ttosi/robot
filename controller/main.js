@@ -13,5 +13,5 @@ logger.log("initializing robot...");
   logger.log(await oled.init());
   logger.log(await oled.startMonitoring());
 
-  await drive.forward(2, 1, 2);
+  // await drive.forward(2, 1, 2);
 })();

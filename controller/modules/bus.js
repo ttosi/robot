@@ -28,7 +28,5 @@ exports.writeSync = (address, buffer) => {
 };
 
 exports.write = (address, buffer) => {
-  // return new Promise((resolve, reject) => {
-    i2c.write(address, buffer);
-  // });
+  i2c.write(address, buffer);
 };
