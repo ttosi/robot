@@ -23,6 +23,7 @@ const _getCommandBuffer = (speed, accel, revs) => {
   return buffer;
 }
 
+// TODO: need to refactor this to use a single method
 const drive = {
   queue: {
     execute() { },
@@ -88,88 +89,5 @@ const drive = {
     });
   }
 }
-
-
-
-// exports.queue = {
-//   commands: [],
-//   add(cmd) {
-//     console.log("add");
-//     this.commands.push(cmd);
-//   },
-//   remove() {
-//     console.log("remove");
-//   },
-//   execute() {
-//     console.log("execute");
-//     console.log(this.commands);
-//   },
-// };
-
-// getCommandBuffer = (speed, accel, revs) => {
-//   const floatArray = new Float32Array([speed, accel, revs]);
-//   const buffer = new Int8Array(floatArray.buffer);
-//   return buffer;
-// }
-
-// exports.forward = async (speed = 1, accel = 1, revs = 1) => {
-//   return Promise.all([
-//     bus.writeSync(
-//       SLAVE_ADDRESS,
-//       Buffer.from([protocol.motor.left, ...getCommandBuffer(speed, accel, revs)])
-//     ),
-//     bus.writeSync(
-//       SLAVE_ADDRESS,
-//       Buffer.from([protocol.motor.right, ...getCommandBuffer(speed, accel, -revs)])
-//     )
-//   ]);
-// };
-
-// exports.reverse = async (speed = 1, accel = 1, revs = 1) => {
-//   return Promise.all([
-//     bus.writeSync(
-//       SLAVE_ADDRESS,
-//       Buffer.from([protocol.motor.left, ...getCommandBuffer(speed, accel, -revs)])
-//     ),
-//     bus.writeSync(
-//       SLAVE_ADDRESS,
-//       Buffer.from([protocol.motor.right, ...getCommandBuffer(speed, accel, revs)])
-//     )
-//   ]);
-// };
-
-// exports.spinLeft = async (speed = 1, accel = 1, revs = 1) => {
-//   return Promise.all([
-//     bus.writeSync(
-//       SLAVE_ADDRESS,
-//       Buffer.from([protocol.motor.left, ...getCommandBuffer(speed, accel, -revs)])
-//     ),
-//     bus.writeSync(
-//       SLAVE_ADDRESS,
-//       Buffer.from([protocol.motor.right, ...getCommandBuffer(speed, accel, -revs)])
-//     )
-//   ]);
-// };
-
-// exports.spinRight = async (speed = 1, accel = 1, revs = 1) => {
-//   return Promise.all([
-//     bus.writeSync(
-//       SLAVE_ADDRESS,
-//       Buffer.from([protocol.motor.left, ...getCommandBuffer(speed, accel, revs)])
-//     ),
-//     bus.writeSync(
-//       SLAVE_ADDRESS,
-//       Buffer.from([protocol.motor.right, ...getCommandBuffer(speed, accel, revs)])
-//     ),
-//   ]);
-// };
-
-// exports.stop = () => {
-//   return Promise.resolve(() => {
-//     bus.writeSync(SLAVE_ADDRESS, Buffer.from([protocol.motor.stop]));
-//   });
-// };
-
-
 
 module.exports = drive;

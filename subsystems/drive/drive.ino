@@ -111,21 +111,21 @@ void receive(int byteCount)
 
         switch (data[0])
         {
-        case 0x00: // emergency stop
-            stop();
-            break;
-        case 0x01: // motor left
-            motorLeft.setSpeedInRevolutionsPerSecond(values[0]);
-            motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(values[1]);
-            motorLeft.setTargetPositionRelativeInRevolutions(values[2]);
-            break;
-        case 0x02: // motor right
-            motorRight.setSpeedInRevolutionsPerSecond(values[0]);
-            motorRight.setAccelerationInRevolutionsPerSecondPerSecond(values[1]);
-            motorRight.setTargetPositionRelativeInRevolutions(values[2]);
-            break;
-        default: // bad command, e-stop
-            stop();
+          case 0x00: // emergency stop
+              stop();
+              break;
+          case 0x01: // motor left
+              motorLeft.setSpeedInRevolutionsPerSecond(values[0]);
+              motorLeft.setAccelerationInRevolutionsPerSecondPerSecond(values[1]);
+              motorLeft.setTargetPositionRelativeInRevolutions(values[2]);
+              break;
+          case 0x02: // motor right
+              motorRight.setSpeedInRevolutionsPerSecond(values[0]);
+              motorRight.setAccelerationInRevolutionsPerSecondPerSecond(values[1]);
+              motorRight.setTargetPositionRelativeInRevolutions(values[2]);
+              break;
+          default: // bad command, e-stop
+              stop();
         }
     }
 }

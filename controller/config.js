@@ -1,13 +1,13 @@
 const config = {
   isDebug: true,
+  oledRefreshInterval: 2 * 1000,
   logging: {
     logToConsole: true,
     logToFile: false,
   },
   slaves: {
     drive: 0x10,
-    pixels: 0x11,
-    sensors: 0x12,
+    sensors: 0x11,
     oled: 0x3c
   }
 }

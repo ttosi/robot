@@ -1,47 +1,44 @@
 const font = require("oled-font-5x7");
+const config = require("../config");
 const Oled = require("./sh1106");
 const sysinfo = require("./sysinfo");
 
-const oled = new Oled();
+const sh1106 = new Oled();
+
+const _monitorInterval = () => { };
+
+const oled = {
+  async init() { },
+  async startMonitoring() { },
+  async stopMonitoring() { }
+};
 
 exports.init = async () => {
   return new Promise(async (resolve, reject) => {
-    await oled.turnOnDisplay();
-    await oled.clearDisplay();
-    await oled.dimDisplay(0xff);
-    await oled.rotateDisplay();
+    await sh1106.turnOnDisplay();
+    await sh1106.clearDisplay();
+    await sh1106.dimDisplay(0xff);
+    await sh1106.rotateDisplay();
     resolve("oled initialized");
   });
 };
 
 exports.startMonitoring = async () => {
   return new Promise(async (resolve, reject) => {
-    oled.clearDisplay();
-    oled.drawRect(2, 2, 126, 62, "WHITE", false);
-    oled.update();
-    
+    sh1106.clearDisplay();
+    sh1106.drawRect(2, 2, 126, 62, "WHITE", false);
+    sh1106.update();
+
     setInterval(async () => {
       const data = await sysinfo.get();
-      // oled.clearDisplay();
-      // oled.drawRect(2, 2, 126, 62, "WHITE", false);
-      // oled.update();
-
-      oled.writeString(10, 9, font, `IP: ${data.ip}`, "WHITE", false);
-      oled.writeString(10, 20, font, `LOAD: ${data.cpu}    `, "WHITE", false);
-      oled.writeString(10, 31, font, `MEM FREE: ${data.mem}`, "WHITE", false);
-      oled.writeString(10, 42, font, `DSK FREE: ${data.disk}`, "WHITE", false);
-      oled.writeString(10, 53, font, `NUM PROCS: ${data.procs}`, "WHITE", false);
-      oled.update(1);
-    }, 3000);
+      sh1106.writeString(10, 9, font, `IP: ${data.ip}`, "WHITE", false);
+      sh1106.writeString(10, 20, font, `LOAD: ${data.cpu}    `, "WHITE", false);
+      sh1106.writeString(10, 31, font, `MEM FREE: ${data.mem}`, "WHITE", false);
+      sh1106.writeString(10, 42, font, `DSK FREE: ${data.disk}`, "WHITE", false);
+      sh1106.writeString(10, 53, font, `NUM PROCS: ${data.procs}`, "WHITE", false);
+      sh1106.update(1);
+    }, config.oledRefreshInterval);
 
     resolve("monitoring started");
   });
 };
-
-// oled.clearDisplay();
-//     oled.drawRect(2, 2, 126, 62, "WHITE", false);
-//     oled.writeString(10, 7, font, `IP: 192.168.0.52`, "WHITE", false);
-//     oled.writeString(10, 18, font, `CPU LOAD: 1.8%`, "WHITE", false);
-//     oled.writeString(10, 29, font, `MEM FREE: 82.1%`, "WHITE", false);
-//     oled.writeString(10, 40, font, `DSK FREE: 64.7%`, "WHITE", false);
-//     oled.update();
