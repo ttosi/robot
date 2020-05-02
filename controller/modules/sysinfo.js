@@ -33,8 +33,8 @@ const sysinfo = {
       voltage.forEach((byte, index) =>
         view.setUint8(index, byte)
       );
-      const floatVoltage = view.getFloat32(0).toFixed(2);
 
+      const floatVoltage = view.getFloat32(0).toFixed(2);
       resolve(!isNaN(floatVoltage) ? floatVoltage : "0.00");
     });
   }

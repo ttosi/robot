@@ -1,21 +1,13 @@
-// byte[0] = [motor selection]
-// byte[1-4] = [speed]
-// byte[5-8] = [acceleration]
-// byte[9-12] = [revolutions]
+// drive command(speed, accel, revs)
+//  byte[0] = [motor selection]
+//  byte[1-4] = [speed]
+//  byte[5-8] = [acceleration]
+//  byte[9-12] = [revolutions]
 
 const config = require("../config");
 const logger = require("./logger")
 const bus = require("./bus");
 const SLAVE_ADDRESS = config.slaves.drive;
-
-const protocol = {
-  motor: {
-    stop: 0x00,
-    left: 0x01,
-    right: 0x02,
-    both: 0x03,
-  }
-};
 
 const _getCommandBuffer = (speed, accel, revs) => {
   const floatArray = new Float32Array([speed, accel, revs]);
@@ -23,8 +15,24 @@ const _getCommandBuffer = (speed, accel, revs) => {
   return buffer;
 }
 
-// TODO: need to refactor this to use a single method
+// TODO: need to move methods to one
 const drive = {
+  motor: {
+    stop: 0x00,
+    left: 0x01,
+    right: 0x02,
+    both: 0x03,
+  },
+  acceleration: {
+    slow: 0x01,
+    medium: 0x03,
+    fast: 0x06
+  },
+  speed: {
+    slow: 0x01,
+    medium: 0x03,
+    fast: 0x06
+  },
   queue: {
     execute() { },
     add() { },
@@ -35,11 +43,11 @@ const drive = {
     return Promise.all([
       bus.writeSync(
         SLAVE_ADDRESS,
-        Buffer.from([protocol.motor.left, ..._getCommandBuffer(speed, accel, revs)])
+        Buffer.from([this.motor.left, ..._getCommandBuffer(speed, accel, revs)])
       ),
       bus.writeSync(
         SLAVE_ADDRESS,
-        Buffer.from([protocol.motor.right, ..._getCommandBuffer(speed, accel, -revs)])
+        Buffer.from([this.motor.right, ..._getCommandBuffer(speed, accel, -revs)])
       )
     ]);
   },
@@ -48,11 +56,11 @@ const drive = {
     return Promise.all([
       bus.writeSync(
         SLAVE_ADDRESS,
-        Buffer.from([protocol.motor.left, ...getCommandBuffer(speed, accel, -revs)])
+        Buffer.from([this.motor.left, ...getCommandBuffer(speed, accel, -revs)])
       ),
       bus.writeSync(
         SLAVE_ADDRESS,
-        Buffer.from([protocol.motor.right, ...getCommandBuffer(speed, accel, revs)])
+        Buffer.from([this.motor.right, ...getCommandBuffer(speed, accel, revs)])
       )
     ]);
   },
@@ -61,11 +69,11 @@ const drive = {
     return Promise.all([
       bus.writeSync(
         SLAVE_ADDRESS,
-        Buffer.from([protocol.motor.left, ...getCommandBuffer(speed, accel, -revs)])
+        Buffer.from([this.motor.left, ...getCommandBuffer(speed, accel, -revs)])
       ),
       bus.writeSync(
         SLAVE_ADDRESS,
-        Buffer.from([protocol.motor.right, ...getCommandBuffer(speed, accel, -revs)])
+        Buffer.from([this.motor.right, ...getCommandBuffer(speed, accel, -revs)])
       )
     ]);
   },
@@ -74,11 +82,11 @@ const drive = {
     return Promise.all([
       bus.writeSync(
         SLAVE_ADDRESS,
-        Buffer.from([protocol.motor.left, ...getCommandBuffer(speed, accel, revs)])
+        Buffer.from([this.motor.left, ...getCommandBuffer(speed, accel, revs)])
       ),
       bus.writeSync(
         SLAVE_ADDRESS,
-        Buffer.from([protocol.motor.right, ...getCommandBuffer(speed, accel, revs)])
+        Buffer.from([this.motor.right, ...getCommandBuffer(speed, accel, revs)])
       ),
     ]);
   },

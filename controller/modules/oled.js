@@ -55,6 +55,14 @@ const oled = {
       clearInterval(monitorInterval);
       resolve("monitoring disabled");
     });
+  },
+  async off()
+  {
+    return new Promise(async (resolve, reject) => {
+      await sh1106.turnOffDisplay();
+      // await sh1106.update();
+      resolve("oled off");
+    });
   }
 };
 

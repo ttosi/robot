@@ -1,5 +1,4 @@
 const config = require("../config");
-const logger = require("./logger")
 const bus = require("./bus");
 const SLAVE_ADDRESS = config.slaves.sensors;
 const SENSOR_PIXEL_COMMAND = config.sensors.command.pixels;
@@ -21,6 +20,7 @@ const pixels = {
     red: [0xff, 0x00, 0x00],
     green: [0x00, 0xff, 0x00],
     blue: [0x00, 0x00, 0xff],
+    black: [0x00, 0x00, 0x00],
   },
   brightness: {
     low: 0x10,

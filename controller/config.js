@@ -1,9 +1,14 @@
 const config = {
+  versions: {
+    controller: "v1.0.1",
+    driveFirmware: "v1.0.0",
+    sensorsFirmware: "v1.1.0"
+  },
   isDebug: true,
   oledRefreshInterval: 5 * 1000,
   logging: {
     logToConsole: true,
-    logToFile: false,
+    logToFile: false
   },
   slaves: {
     drive: 0x10,
@@ -14,6 +19,9 @@ const config = {
     command: {
       pixels: 0x50,
       voltage: 0x56
+    },
+    pixels: {
+
     }
   }
 }

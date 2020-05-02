@@ -24,16 +24,13 @@ void setup()
 {
     Serial.begin(115200);
 
-    // initialize i2c at slave address
     Wire.begin(SLAVE_ADDRESS);
     Wire.onReceive(receive);
     Wire.onRequest(send);
 
-    // setup left servo motor
     motorLeft.connectToPins(MOTOR_LEFT_STEP_PIN, MOTOR_LEFT_DIR_PIN);
     motorLeft.setStepsPerRevolution(200);
 
-    // setup right servo motor
     motorRight.connectToPins(MOTOR_RIGHT_STEP_PIN, MOTOR_RIGHT_DIR_PIN);
     motorRight.setStepsPerRevolution(200);
 
