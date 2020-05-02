@@ -10,7 +10,6 @@ const sysinfo = {
       const network = await si.networkInterfaces();
       const mem = await si.mem();
       const disk = await si.fsSize();
-      const procs = await si.processes();
 
       resolve({
         ip: `${network.find((n) => n.ifaceName === "wlan0").ip4}`,
@@ -30,12 +29,12 @@ const sysinfo = {
       ).reverse();
       const buffer = new ArrayBuffer(4);
       const view = new DataView(buffer);
-      
-      voltage.forEach((byte, index) => 
+
+      voltage.forEach((byte, index) =>
         view.setUint8(index, byte)
       );
       const floatVoltage = view.getFloat32(0).toFixed(2);
-      
+
       resolve(!isNaN(floatVoltage) ? floatVoltage : "0.00");
     });
   }

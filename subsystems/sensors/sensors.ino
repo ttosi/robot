@@ -40,7 +40,8 @@ uint8_t pixelBrightness = 0x10;
 float currentVoltage = 0.00;
 float lastVoltage = 0.00;
 
-union floatToBytes {
+union floatToBytes
+{
     char buffer[4];
     float value;
 } converter;
