@@ -1,3 +1,4 @@
+const config = require("../config");
 const si = require("systeminformation");
 const bus = require("./bus.js");
 
@@ -22,13 +23,19 @@ const sysinfo = {
   },
   getVoltage() {
     return new Promise(async (resolve, reject) => {
-      const voltage = (await bus.read(0x11, 0x56, 0x04)).reverse();
+      const voltage = (await bus.read(
+        config.slaves.sensors,
+        config.sensors.command.voltage,
+        0x04)
+      ).reverse();
       const buffer = new ArrayBuffer(4);
       const view = new DataView(buffer);
-
-      voltage.forEach((byte, index) => view.setUint8(index, byte));
+      
+      voltage.forEach((byte, index) => 
+        view.setUint8(index, byte)
+      );
       const floatVoltage = view.getFloat32(0).toFixed(2);
-      // console.log(!isNaN(floatVoltage) ? floatVoltage : 0.00);
+      
       resolve(!isNaN(floatVoltage) ? floatVoltage : "0.00");
     });
   }

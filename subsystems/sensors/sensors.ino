@@ -11,7 +11,6 @@
 //    [0x06] - spin right pixels
 //    [0x07] - strobe pixels
 //    [0x08] - breathe pixels
-//    [0x09] - rainbow pixels
 // voltage protocol = 0x56
 //    reads and return current battery voltage
 
@@ -32,7 +31,6 @@ Pixels pixels;
 Voltage voltage;
 uint8_t currentCommand;
 
-
 uint8_t pixelCommand = 0x01;
 uint8_t pixelColorRed = 0x00; 
 uint8_t pixelColorGreen = 0xff; 
@@ -47,7 +45,6 @@ union floatToBytes {
     float value;
 } converter;
 
-
 void setup()
 {
   Serial.begin(115200);
@@ -59,7 +56,7 @@ void setup()
   pixels.off();
 
   pixelThread->onRun(sendPixelCommand);
-  pixelThread->setInterval(50);
+  pixelThread->setInterval(25);
   threadControl.add(pixelThread);
 
   voltageThread->onRun(readVoltage);

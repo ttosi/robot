@@ -2,7 +2,7 @@ const config = require("../config");
 const logger = require("./logger")
 const bus = require("./bus");
 const SLAVE_ADDRESS = config.slaves.sensors;
-const SENSOR_PIXEL_COMMAND = 0x50;
+const SENSOR_PIXEL_COMMAND = config.sensors.command.pixels;
 
 const pixels = {
   command: {

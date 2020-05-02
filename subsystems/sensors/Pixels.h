@@ -4,6 +4,10 @@
 #define NUM_PIXELS 10
 #define DATA_PIN 6
 
+#define STROBE_COUNT 10
+#define STROBE_FLASH_DELAY 50
+#define STROBE_END_PAUSE 250
+
 class Pixels
 {
   public:
@@ -20,4 +24,5 @@ class Pixels
   private:
     void solid(CRGB color);
     void breathe(CRGB color);
+    void strobe(CRGB color);
 };
