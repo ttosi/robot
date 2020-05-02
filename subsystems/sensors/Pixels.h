@@ -16,6 +16,7 @@ class Pixels
       uint8_t brightness
     );
     void Pixels::off();
+    
   private:
     void solid(CRGB color);
     void breathe(CRGB color);

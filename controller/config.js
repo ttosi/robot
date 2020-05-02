@@ -1,6 +1,6 @@
 const config = {
   isDebug: true,
-  oledRefreshInterval: 2 * 1000,
+  oledRefreshInterval: 5 * 1000,
   logging: {
     logToConsole: true,
     logToFile: false,

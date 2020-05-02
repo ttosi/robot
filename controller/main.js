@@ -12,10 +12,11 @@ logger.log("initializing robot...");
 (async () => {
   logger.log(await bus.init());
   logger.log(await oled.init());
+
   logger.log(await pixels.send(
-    pixels.command.breathe,
-    pixels.color.red,
-    pixels.brightness.high));
+    pixels.command.solid,
+    pixels.color.green,
+    pixels.brightness.low));
   logger.log(await oled.startMonitoring());
-  await drive.forward(2, 1, 2);
+  // await drive.forward(2, 1, 2);
 })();

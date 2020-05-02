@@ -32,10 +32,10 @@ exports.startMonitoring = async () => {
     setInterval(async () => {
       const data = await sysinfo.get();
       sh1106.writeString(10, 9, font, `IP: ${data.ip}`, "WHITE", false);
-      sh1106.writeString(10, 20, font, `LOAD: ${data.cpu}    `, "WHITE", false);
-      sh1106.writeString(10, 31, font, `MEM FREE: ${data.mem}`, "WHITE", false);
-      sh1106.writeString(10, 42, font, `DSK FREE: ${data.disk}`, "WHITE", false);
-      sh1106.writeString(10, 53, font, `NUM PROCS: ${data.procs}`, "WHITE", false);
+      sh1106.writeString(10, 20, font, `VOLTS: ${data.volts}   `, "WHITE", false);
+      sh1106.writeString(10, 31, font, `LOAD: ${data.cpu}      `, "WHITE", false);
+      sh1106.writeString(10, 42, font, `MEM FREE: ${data.mem}  `, "WHITE", false);
+      sh1106.writeString(10, 53, font, `DSK FREE: ${data.disk} `, "WHITE", false);
       sh1106.update(1);
     }, config.oledRefreshInterval);
 
