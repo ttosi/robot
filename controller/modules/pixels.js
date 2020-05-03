@@ -30,7 +30,10 @@ const pixels = {
   async send(command, color, brightness) {
     return new Promise(async (resolve, reject) => {
       await bus.write(SLAVE_ADDRESS, Buffer.from([SENSOR_PIXEL_COMMAND, command, ...color, brightness]));
-      resolve(`pixels: cmd=${Object.keys(this.command)[command]}`);
+      const cmd = Object.keys(this.command)[command];
+      const clr = Object.keys(this.color).find(m => this.color[m] == color);
+      const brt = Object.keys(this.brightness).find(m => this.brightness[m] == brightness);
+      resolve(`pixels: cmd=${cmd}, clr=${clr}, brt=${brt}`);
     });
   }
 };

@@ -2,6 +2,7 @@ const config = require("./config");
 const logger = require("./modules/logger");
 const bus = require("./modules/bus.js");
 const drive = require("./modules/drive.js");
+const drvProtocol = require("./modules/protocols/drive");
 const oled = require("./modules/oled.js");
 const pixels = require("./modules/pixels");
 
@@ -20,10 +21,11 @@ logger.log(
     pixels.color.blue,
     pixels.brightness.low));
   logger.log(await oled.startMonitoring());
-  // await drive.forward(
-  //   drive.speed.medium,
-  //   drive.acceleration.medium,
-  //   2);
+  await drive.execute(
+    drvProtocol.command.spinLeft,
+    1,
+    drvProtocol.speed.medium,
+    drvProtocol.acceleration.slow);
 })();
 
 process.on('SIGINT', async () => {
@@ -36,8 +38,8 @@ process.on('SIGINT', async () => {
     pixels.color.black,
     pixels.brightness.low));
   
-  logger.log("controller sucessfully down");
-  setTimeout(() => {
-    process.exit();
+    setTimeout(() => {
+      logger.log("controller sucessfully down");
+      process.exit();
   }, 1250);
 });
