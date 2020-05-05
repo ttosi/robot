@@ -18,7 +18,8 @@ const config = {
   sensors: {
     command: {
       pixels: 0x50,
-      voltage: 0x56
+      voltage: 0x56,
+      motorTemps: 0x54
     },
     pixels: {
 

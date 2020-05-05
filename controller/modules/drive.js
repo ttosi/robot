@@ -4,27 +4,49 @@ const logger = require("./logger")
 const bus = require("./bus");
 const SLAVE_ADDRESS = config.slaves.drive;
 
-console.log(protocol)
-
 const drive = {
   queue: {
-    execute() { },
-    add() { },
-    remove() { }
+    async execute() {
+      this.commands.forEach(async c => {
+        await drive.execute(...c);
+        // console.log(c)
+      })
+    },
+    add(command) {
+      this.commands.push(command);
+    },
+    remove() { },
+    commands: []
   },
-  async execute(cmd = 1, revs = 1, speed = 1, accel = 1) {
-    logger.log(`drive: ${_getLogValues(cmd, revs, speed, accel)}`);
+  async execute(revs = 1, cmd = 1, speed = 1, accel = 1) {
     const revDirs = _getMotorDirections(cmd, revs);
+    
     return Promise.all([
+      // setTimeout(() => {
+      //   console.log(`drive: ${_getLogValues(revs * cmd.ml, cmd, speed, accel)}`)
+      //   // return ["st1", revDirs[0]]
+      // }, 1000),
+      // setTimeout(() => {
+      //   console.log(`drive: ${_getLogValues(revs * cmd.mr, cmd, speed, accel)}`)
+      //   // return ["st2", revDirs[1]]
+      // }, 1000)
       bus.writeSync(
         SLAVE_ADDRESS,
-        Buffer.from([protocol.motor.left, ..._getCommandBuffer(speed, accel, revDirs[0])])
+        Buffer.from([
+          protocol.motor.left,
+          ..._getCommandBuffer(speed, accel, revs * cmd.ml)
+        ])
       ),
       bus.writeSync(
         SLAVE_ADDRESS,
-        Buffer.from([protocol.motor.right, ..._getCommandBuffer(speed, accel, revDirs[1])])
+        Buffer.from([protocol.motor.right,
+          ..._getCommandBuffer(speed, accel, revs * cmd.mr)
+        ])
       )
-    ]);
+    ]).then(d => {
+      return `drive: ${_getLogValues(revs * cmd.mr, cmd, speed, accel)}`
+      // return d
+    });
   }
 }
 
@@ -34,11 +56,11 @@ const _getCommandBuffer = (speed, accel, revs) => {
   return buffer;
 }
 
-const _getLogValues = (command, revs, speed, accel) => {
-  const cmd = Object.keys(protocol.command).find(c => protocol.command[c] == command);
+const _getLogValues = (revs, command, speed, accel) => {
+  // const cmd = Object.keys(protocol.commands).find(c => protocol.commands[c].cmd == command);
   const spd = Object.keys(protocol.speed).find(s => protocol.speed[s] == speed) || speed;
   const acl = Object.keys(protocol.acceleration).find(a => protocol.acceleration[a] == accel) || accel;
-  return `cmd=${cmd}, revs=${revs}, spd=${spd}, acl=${acl}`;
+  return `cmd=${command.name}, revs=${revs}, spd=${spd}, acl=${acl}`;
 };
 
 const _getMotorDirections = (command, revs) => {

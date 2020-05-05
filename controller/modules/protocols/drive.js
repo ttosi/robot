@@ -1,14 +1,39 @@
-const drive =  {
+const drive = {
   motor: {
     left: 0x01,
     right: 0x02,
   },
-  command: {
-    forward: 0x01,
-    reverse: 0x02,
-    spinLeft: 0x03,
-    spinRight: 0x04,
-    stop: 0x05,
+  commands: {
+    forward: {
+      cmd: 0x01,
+      name: "forward",
+      ml: 1,
+      mr: -1
+    },
+    reverse: {
+      cmd: 0x02,
+      name: "reverse",
+      ml: -1,
+      mr: 1
+    },
+    spinLeft: {
+      cmd: 0x03,
+      name: "spinLeft",
+      ml: -1,
+      mr: -1
+    },
+    spinRight: {
+      cmd: 0x04,
+      name: "spinRight",
+      ml: 1,
+      mr: 1
+    },
+    stop: {
+      cmd: 0x05,
+      name: "stop",
+      ml: 0,
+      mr: 0
+    }
   },
   acceleration: {
     slow: 0x01,

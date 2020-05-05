@@ -1,4 +1,3 @@
-// hello
 const config = require("../config");
 const bus = require("./bus");
 const SLAVE_ADDRESS = config.slaves.sensors;

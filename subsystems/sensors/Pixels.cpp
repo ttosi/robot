@@ -3,9 +3,14 @@
 
 CRGB leds[NUM_PIXELS];
 
-Pixels::Pixels() { FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_PIXELS); }
+Pixels::Pixels() 
+{
+  FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_PIXELS);
+}
 
-void Pixels::command(uint8_t command, uint8_t red, uint8_t green, uint8_t blue, uint8_t brightness) {
+void Pixels::command(uint8_t command, uint8_t red,uint8_t green, 
+  uint8_t blue, uint8_t brightness)
+{
   CRGB color = CRGB(green, red, blue);
   FastLED.setBrightness(brightness);
 
