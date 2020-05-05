@@ -1,15 +1,14 @@
+const fs = require("fs");
 const config = require("../config");
 const si = require("systeminformation");
 const bus = require("./bus.js");
-
-// cat /sys/class/thermal/thermal_zone0/temp
-// (40780 / 1000).toFixed(1)
 
 const sysinfo = {
   async get() {
     return new Promise(async (resolve, reject) => {
       const voltage = await this.getVoltage();
-      const load = await si.currentLoad();
+      const cpuLoad = await si.currentLoad();
+      const cpuTemp = await this.getCpuTemp();
       const network = await si.networkInterfaces();
       const mem = await si.mem();
       const motorTemps = await this.getMotorTemps();
@@ -17,7 +16,7 @@ const sysinfo = {
       resolve({
         ip: `${network.find((n) => n.ifaceName === "wlan0").ip4}`,
         volts: `${voltage}v`,
-        cpu: `${load.currentload.toFixed(1)}%`,
+        cpu: `${cpuLoad.currentload.toFixed(1)}%, ${cpuTemp}C`,
         mem: `${(100 - ((mem.free / mem.total) * 100)).toFixed(1)}%`,
         temps: `L${motorTemps[0]} R${motorTemps[1]}`
       })
@@ -35,6 +34,14 @@ const sysinfo = {
       resolve(!isNaN(voltage) ? voltage : "0.00");
     });
   },
+  getCpuTemp() {
+    return new Promise((resolve, reject) => {
+      fs.readFile("/sys/class/thermal/thermal_zone0/temp", (err, data) => {
+        // console.log((data / 1000).toFixed(1));
+        resolve((data / 1000).toFixed(1));
+      });
+    })
+  },
   getMotorTemps() {
     return new Promise(async (resolve, reject) => {
       const temps = (await bus.read(
@@ -43,9 +50,12 @@ const sysinfo = {
         0x08)
       ).reverse();
 
+      console.log(temps);
+
       const leftTemp = this.getFloat(temps.slice(0, 4));
       const rightTemp = this.getFloat(temps.slice(4, 8));
 
+      console.log(leftTemp, rightTemp);
       resolve([leftTemp, rightTemp]);
     });
   },

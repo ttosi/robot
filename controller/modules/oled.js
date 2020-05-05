@@ -39,7 +39,7 @@ const oled = {
         sh1106.writeString(10, 30, font, `LOAD: ${data.cpu}      `, "WHITE", false);
         sh1106.writeString(10, 41, font, `MEM FREE: ${data.mem}  `, "WHITE", false);
         sh1106.writeString(10, 52, font, `TEMPS: ${data.temps} `, "WHITE", false);
-        sh1106.update(1);
+        sh1106.update();
       }, config.oledRefreshInterval);
       resolve("monitoring started");
     });

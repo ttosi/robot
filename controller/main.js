@@ -16,11 +16,16 @@ logger.log(
 (async () => {
   logger.log(await bus.init());
   logger.log(await oled.init());
-  // logger.log(await pixels.send(
-  //   pixels.command.solid,
-  //   pixels.color.blue,
-  //   pixels.brightness.low));
+  logger.log(await pixels.send(
+    pixels.command.solid,
+    pixels.color.blue,
+    pixels.brightness.low));
   logger.log(await oled.startMonitoring());
+  // logger.log(await drive.execute(
+  //   20,
+  //   dp.commands.forward,
+  //   dp.speed.medium,
+  //   dp.acceleration.slow));
 
   // Promise.all([
   //   pixels.send(
@@ -37,11 +42,7 @@ logger.log(
   // drive.queue.add([1, dp.commands.spinLeft, dp.speed.slow, dp.acceleration.slow])
   // drive.queue.add([1, dp.commands.forward, dp.speed.slow, dp.acceleration.slow])
   // drive.queue.execute().then(d => console.log(d));
-  // logger.log(await drive.execute(
-  //   1,
-  //   dp.commands.forward,
-  //   dp.speed.fast,
-  //   dp.acceleration.slow));
+  
 })();
 
 process.on('SIGINT', async () => {
